@@ -36,18 +36,17 @@ module.exports = {
       exclude: [/node_module/, 'server.js', 'mock/*'],
       loader: 'eslint'
     }],
-    loaders: [{ 
+    loaders: [{
       test: /\.(js|jsx)$/,
       exclude: /node_modules/,
-      //loader: 'react-hot!babel'
-      loader: 'babel'
-    }, { 
-      test: /\.less$/, 
-      loader: lessLoaders 
+      loader: 'react-hot!babel'
     }, {
-      test: /\.css$/, 
-      loader: cssLoaders 
-    }, { 
+      test: /\.less$/,
+      loader: lessLoaders
+    }, {
+      test: /\.css$/,
+      loader: cssLoaders
+    }, {
       test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
       loader: 'url-loader?limit=10000',
     }]
