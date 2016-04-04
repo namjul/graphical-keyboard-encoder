@@ -23,7 +23,6 @@ module.exports = {
   output: {
     path: require('path').resolve(__dirname, 'dist'),
     pathinfo: isProduction ? false : true,
-    publicPath: '/',
     filename: 'bundle.js'
   },
 
@@ -31,15 +30,13 @@ module.exports = {
   debug: isProduction ? false : true,
 
   module: {
-    preLoaders: [{
-      test: /\.(js|jsx)$/,
-      exclude: [/node_module/, 'server.js', 'mock/*'],
-      loader: 'eslint'
-    }],
     loaders: [{
-      test: /\.(js|jsx)$/,
+      test: /\.jsx?$/,
       exclude: /node_modules/,
-      loader: 'react-hot!babel'
+      loader: 'babel',
+      query: {
+        presets: ['es2015', 'react', 'stage-0']
+      }
     }, {
       test: /\.less$/,
       loader: lessLoaders
