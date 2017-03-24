@@ -66,22 +66,9 @@ export default class App extends Component {
 
   render() {
 
-    let surface = {
-      base: {
-        width: '100%',
-        minHeight: '100%',
-        padding: '5',
-        boxSizing: 'border-box'
-      },
-      textinput: {
-        position: 'absolute',
-        opacity: 0
-      }
-    };
-
     return (
-      <div style={surface.base} onClick={this.enableWriting.bind(this)}>
-        <input type='' ref='input' style={surface.textinput} onKeyPress={this.handleChange.bind(this)} />
+      <div className="w-100 min-h-100 p1" onClick={this.enableWriting.bind(this)}>
+        <input type='' ref='input' className="absolute o-0" onKeyPress={this.handleChange.bind(this)} />
         {
           this.state.words.map(word => {
             return <Word word={word} keyboard={this.keyboard} />

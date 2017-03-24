@@ -9,12 +9,17 @@
   },
   "dependencies": {
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "tachyons": "^4.6.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "css": "tachyons src/css/app.css > src/index.css --minify",
+    "css:watch": "watch 'npm run css' ./src/css/",
+    "prestart": "npm run css",
+    "prebuild": "npm run css"
   }
 }
