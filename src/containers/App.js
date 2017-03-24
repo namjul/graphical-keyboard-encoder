@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import Word from '../components/Word';
-import update from 'react-addons-update';
+import update from 'immutability-helper';
 import Keyboard from '../lib/keyboard'
 import germanLayout from '../lib/keyboard/layouts/german.js';
-import './app.css';
 
 // ['ich', 'schreibe', 'ein', 'programm']
 

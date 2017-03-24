@@ -1,4 +1,3 @@
-
 export default class Keyboard {
   constructor(layout) {
     this.layout = layout;
