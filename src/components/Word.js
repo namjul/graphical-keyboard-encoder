@@ -2,53 +2,54 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 export default class Word extends Component {
-  constructor(props) {
-    super(props);
+
+  static defaultProps = {
+    x: 0,
+    y: 0,
+    width: 300,
+    height: 100
   }
 
-  componentDidMount() {
-    var context = ReactDOM.findDOMNode(this).getContext('2d');
-    this.paint(context);
-  }
+  prepareData() {
 
-  componentDidUpdate() {
-    var context = ReactDOM.findDOMNode(this).getContext('2d');
-    this.paint(context);
-  }
+    const { width, height } = this.props
+    const wordAsArray = this.props.word.split('')
+    // const firstChar = wordAsArray.shift()
+    // const { top: startX, left: startY } = this.props.keyboard.getPosition(firstChar)
 
-  paint(context) {
+    const startX = 0
+    const startY = 0
 
-    context.clearRect(0, 0, 300, 100);
-    context.imageSmoothingEnabled = true;
-    context.lineWidth = 0.5;
-    context.beginPath();
-    context.moveTo(0.5, 0.5);
+    let d = [`M ${startX} ${startY}`];
 
-    let btnWidth = 300/ 14; // maximal 14 tasten in einer reihe
-    let btnHeight = 100 / 4; //maximal 4 reihen
+    let btnWidth = width/ 14; // maximal 14 tasten in einer reihe
+    let btnHeight = height / 4; //maximal 4 reihen
 
-    this.props.word.split('').forEach(char => {
-      let {top, left} = this.props.keyboard.getPosition(char);
-      console.log(btnWidth * left, btnHeight * top, top, left, char);
-      context.lineTo(btnWidth * left, btnHeight * top);
 
+    let collector = wordAsArray.map(char => {
+      let { top, left } = this.props.keyboard.getPosition(char);
+
+      let xNext = startX + left * btnWidth;
+      let yNext = startY + top * btnHeight;
+      return `L ${xNext} ${yNext}`;
     });
 
-    context.strokeStyle = '#000';
-    context.stroke();
-
+    return d.concat(collector).join(' ');
   }
 
   render() {
-
-    let canvasStyles = {
-      display: 'inline-block',
-      padding: '5',
-      verticalAlign: 'top'
-    }
-
+    const { x, y } = this.props
+    let d = this.prepareData();
     return (
-      <canvas style={canvasStyles} width={300} height={100} />
+      <g
+        strokeLinejoin="round"
+        strokeWidth="1"
+        stroke="black"
+        transform={`translate(${x},${y})`}
+        fill="rgba(0,0,0,0)"
+      >
+        <path d={d} />
+      </g>
     );
   }
 }
