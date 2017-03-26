@@ -1,8 +1,8 @@
 {
-  "name": "keyboardgesture",
+  "name": "keyboard-gesture",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://namjul.github.io/graphical-keyboard-encoder",
+  "homepage": "https://namjul.github.io/keyboard-gesture",
   "devDependencies": {
     "gh-pages": "^0.12.0",
     "react-scripts": "0.9.5",
