@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 
 export default class Word extends Component {
 
@@ -12,34 +11,44 @@ export default class Word extends Component {
 
   prepareData() {
 
-    const { width, height } = this.props
-    const wordAsArray = this.props.word.split('')
-    // const firstChar = wordAsArray.shift()
-    // const { top: startX, left: startY } = this.props.keyboard.getPosition(firstChar)
+    const { width, height, word, keyboard } = this.props
+    const btnWidth = width/ 13; // maximal 14 tasten in einer reihe
+    const btnHeight = height / 4; //maximal 4 reihen
 
-    const startX = 0
-    const startY = 0
+    const wordAsArray = word.split('')
+    const firstChar = wordAsArray.shift()
+    const { top: startY, left: startX } = keyboard.getPosition(firstChar)
 
-    let d = [`M ${startX} ${startY}`];
-
-    let btnWidth = width/ 14; // maximal 14 tasten in einer reihe
-    let btnHeight = height / 4; //maximal 4 reihen
-
+    let d = [`M ${startX * btnWidth} ${startY * btnHeight}`];
 
     let collector = wordAsArray.map(char => {
-      let { top, left } = this.props.keyboard.getPosition(char);
+      let { top, left } = keyboard.getPosition(char);
 
-      let xNext = startX + left * btnWidth;
-      let yNext = startY + top * btnHeight;
+      let xNext = left * btnWidth;
+      let yNext = top * btnHeight;
       return `L ${xNext} ${yNext}`;
     });
 
     return d.concat(collector).join(' ');
   }
 
+  renderStartPoint() {
+    const { width, height, word, keyboard } = this.props
+
+    if (word.length === 1) {
+      const btnWidth = width/ 13; // maximal 14 tasten in einer reihe
+      const btnHeight = height / 4; //maximal 4 reihen
+      const { top, left } = keyboard.getPosition(word[0])
+      console.log('top: ', top);
+      console.log('left: ', left);
+      return <circle cx={left * btnWidth} cy={top * btnHeight} r="1" />
+    }
+  }
+
   render() {
-    const { x, y } = this.props
-    let d = this.prepareData();
+    const { x, y } = this.props;
+    const d = this.prepareData();
+
     return (
       <g
         strokeLinejoin="round"
@@ -48,6 +57,7 @@ export default class Word extends Component {
         transform={`translate(${x},${y})`}
         fill="rgba(0,0,0,0)"
       >
+        { this.renderStartPoint() }
         <path d={d} />
       </g>
     );

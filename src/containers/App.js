@@ -119,8 +119,11 @@ export default class App extends Component {
               }}
             >
               {
-                this.state.words.map((word, index) => {
+                this.state.words
+                  .filter(word => word !== '')
+                  .map((word, index) => {
                   return <Word
+                    key={index}
                     word={word}
                     keyboard={keyboard}
                     x={index % columns * width}
