@@ -5,6 +5,7 @@ import Keyboard from '../lib/keyboard'
 import germanLayout from '../lib/keyboard/layouts/german.js';
 import download from 'downloadjs';
 import debounce from 'debounce';
+import classnames from 'classnames';
 
 const keyboard = new Keyboard(germanLayout)
 
@@ -35,15 +36,15 @@ export default class App extends Component {
 
   state = {
     words: [],
-    width: window.innerWidth
+    width: window.innerWidth,
+    focus: true
   }
 
   componentDidMount() {
-    this.refs.input.focus();
     window.addEventListener('resize', this.handleResize)
   }
 
-  handleChange(event) {
+  handleChange = (event) => {
 
     //let modifier = event.getModifierState('Shift')
 
@@ -62,17 +63,25 @@ export default class App extends Component {
 
   }
 
-  enableWriting() {
-    this.refs.input.focus();
+  writingEnabled = () => {
+    if (this.inputNode !== document.activeElement) {
+      this.setState({ focus: true })
+      this.inputNode.focus();
+    }
+  }
+
+  writingDisabled = () => {
+    if (this.inputNode === document.activeElement) {
+      this.setState({ focus: false })
+    }
   }
 
   handleClick = () => {
-    const svg = this.node.outerHTML
+    const svg = this.svgNode.outerHTML
     download(new Blob([svg]), 'keyboardgesture.svg', 'text/sgv');
   }
 
   handleResize = debounce(() => {
-    console.log('resize');
     this.setState({ width: window.innerWidth })
   })
 
@@ -82,32 +91,47 @@ export default class App extends Component {
     const columns = Math.floor(this.state.width / width)
 
     return (
-      <div className="w-100 min-h-100" onClick={this.enableWriting.bind(this)}>
-        <input type="text" ref="input" className="absolute o-0" onKeyPress={this.handleChange.bind(this)} />
+      <div
+        className="w-100 min-h-100"
+        className={classnames('w-100 min-h-100 bg-near-white', { 'bg-white': this.state.focus })}
+        onClick={this.writingEnabled}
+      >
+        <input
+          type="text"
+          autoFocus
+          ref={node => this.inputNode = node}
+          className="absolute o-0"
+          onKeyPress={this.handleChange}
+          onBlur={this.writingDisabled}
+        />
         <button type="button" onClick={this.handleClick} className="absolute bottom-0 right-0">download svg</button>
-        <svg
-          width={width * columns}
-          height={window.innerHeight - 100}
-          className="absolute pa5"
-          ref={node => this.node = node}
-          style={{
-            left: '50%',
-            transform: 'translateX(-50%)'
-          }}
-        >
-          {
-            this.state.words.map((word, index) => {
-              return <Word
-                word={word}
-                keyboard={keyboard}
-                x={index % columns * width}
-                y={Math.floor(index / columns) * height}
-                width={width}
-                height={height}
-              />
-            })
-          }
-        </svg>
+        {
+          this.state.focus && this.state.words.length === 0
+            ? <span>start typing</span>
+            : <svg
+              width={width * columns}
+              height={window.innerHeight - 100}
+              className="absolute pa5"
+              ref={node => this.svgNode = node}
+              style={{
+                left: '50%',
+                transform: 'translateX(-50%)'
+              }}
+            >
+              {
+                this.state.words.map((word, index) => {
+                  return <Word
+                    word={word}
+                    keyboard={keyboard}
+                    x={index % columns * width}
+                    y={Math.floor(index / columns) * height}
+                    width={width}
+                    height={height}
+                  />
+                })
+              }
+            </svg>
+        }
       </div>
     );
   }
