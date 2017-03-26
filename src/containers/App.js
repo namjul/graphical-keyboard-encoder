@@ -9,29 +9,6 @@ import classnames from 'classnames';
 
 const keyboard = new Keyboard(germanLayout)
 
-// ['ich', 'schreibe', 'ein', 'programm']
-
-/*[
-  {
-    id: 1,
-    text: [
-      {
-        char: 'i',
-        modifier: 'normal'
-      },
-      {
-        char: 'I',
-        modifier: 'shift'
-      }
-    ]
-  }
-]*/
-
-/**
- * KeyPress für Zeichen erkennen.
- * KeyDown/KeyUp für Zustand und Taste(nur vordefinierte) erkennen.
- */
-
 export default class App extends Component {
 
   state = {
@@ -92,9 +69,12 @@ export default class App extends Component {
 
     return (
       <div
-        className="w-100 min-h-100"
-        className={classnames('w-100 min-h-100 bg-near-white', { 'bg-white': this.state.focus })}
+        className={classnames('w-100 min-h-100 relative center bg-near-white', { 'bg-white': this.state.focus })}
         onClick={this.writingEnabled}
+        style={{
+          width: width * columns,
+          height: window.innerHeight
+        }}
       >
         <input
           type="text"
@@ -104,19 +84,14 @@ export default class App extends Component {
           onKeyPress={this.handleChange}
           onBlur={this.writingDisabled}
         />
-        <button type="button" onClick={this.handleClick} className="absolute bottom-0 right-0">download svg</button>
         {
-          this.state.focus && this.state.words.length === 0
-            ? <span>start typing</span>
+          this.state.words.length === 0
+            ? <span>{`${this.state.focus ? 'start typing' : ''}`}</span>
             : <svg
-              width={width * columns}
-              height={window.innerHeight - 100}
-              className="absolute pa5"
+              width="100%"
+              height="100%"
+              className="absolute"
               ref={node => this.svgNode = node}
-              style={{
-                left: '50%',
-                transform: 'translateX(-50%)'
-              }}
             >
               {
                 this.state.words
@@ -134,6 +109,17 @@ export default class App extends Component {
                 })
               }
             </svg>
+        }
+        {
+          this.state.words.length > 0
+            ? <button
+              type="button"
+              onClick={this.handleClick}
+              className="absolute bottom-0 right-0"
+            >
+              download svg
+            </button>
+            : null
         }
       </div>
     );
