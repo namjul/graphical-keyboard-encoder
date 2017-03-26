@@ -2,14 +2,18 @@
   "name": "keyboardgesture",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://namjul.github.io/graphical-keyboard-encoder",
   "devDependencies": {
+    "gh-pages": "^0.12.0",
     "react-scripts": "0.9.5",
-    "watch": "^1.0.2",
-    "tachyons-cli": "^1.0.10"
+    "tachyons-cli": "^1.0.10",
+    "watch": "^1.0.2"
   },
   "dependencies": {
+    "classnames": "^2.2.5",
     "debounce": "^1.0.0",
     "downloadjs": "^1.4.7",
+    "immutability-helper": "^2.1.2",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "tachyons": "^4.6.2"
@@ -22,6 +26,8 @@
     "css": "tachyons src/css/app.css > src/index.css --minify",
     "css:watch": "watch 'npm run css' ./src/css/",
     "prestart": "npm run css",
-    "prebuild": "npm run css"
+    "prebuild": "npm run css",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   }
 }
